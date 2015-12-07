@@ -16,7 +16,6 @@ Forts_Defense_X := "1|2|3|4"
 Forts_Conquest= none
 Forts_Conquest_X := "1|2|3"
 
-
 Loop, read, Fortress_Siege.txt
 {	Loop, parse, A_LoopReadLine, %A_Tab%
 		{	Fort_Siege= %A_LoopField%
@@ -66,7 +65,6 @@ IniRead, IniOrder, %IniFileName%, %IniSection%, Order, 1
 IniRead, IniOperation, %IniFileName%, %IniSection%, Operation, 1
 IniRead, IniEndgame, %IniFileName%, %IniSection%, Endgame, 1
 IniRead, IniFund, %IniFileName%, %IniSection%, Fund, 0
-IniRead, Inix86, %IniFileName%, %IniSection%, x86, 0
 
 Menu, MyMenu, Add, ownedcards.txt, MenuOwnedcards
 Menu, MyMenu, Add, customdecks.txt, MenuCustomdecks
@@ -76,109 +74,214 @@ Menu, MyMenu, Add, Help, MenuHelp
 Menu, MyMenu, Add, Web, MenuWeb
 Gui, Menu, MyMenu
 
-Gui, Add, Text, r2, My Deck:
-Gui, Add, Text, r1, My Fortress:
-Gui, Add, Text, r2, Enemy Deck(s):
-Gui, Add, Text, r1, Enemy Fortress:
-Gui, Add, Text, r1, VIP Units:
-Gui, Add, Text, r1, Quest:
-Gui, Add, Text, r1, Effect:
+Gui, Add, Tab, Buttons w450 h260, Mission|Battle|GW|CQ|Brawl|Raid|Campaign
+
+Gui, Tab,  ;
+Gui, Add, Text, r1 ys, Effect:
 Gui, Add, Text, r1, Mode:
+Gui, Add, Text, r1, Endgame:
 Gui, Add, Text, r1, Operation:
+Gui, Add, Text, r1 w40, Order:
+Gui, Add, Text, r1, Iterations:
+Gui, Add, Text, r1 w45, Climbex:
+Gui, Add, Text, r1, Threads:
 Gui, Add, Text, r1, Flags:
-Gui, Add, Text, r1, Запасы:
 
-Gui, Add, Edit, vMyDeck ym w680 r2, %IniMyDeck%
+Gui, Add, ComboBox, vEffect Choose1 w140 ys section, %BGEffects%
+Gui, Add, Text, ys section, -
+Gui, Add, DDL, vEffectX ys w30, %BGEffectsX%
+Gui, Add, Checkbox, vModeATK xs-150 section Checked, ATK
+Gui, Add, Checkbox, vModeDEF ys, DEF
+Gui, Add, DDL, altsubmit vEndgame Choose%IniEndgame% w190 xs y+10, none|0 - Maxed Units|1 - Maxed Fused|2 - Maxed Quads
+Gui, Add, DDL, altsubmit vOrder Group Choose%IniOrder% w190, Random|Ordered (honor 3-card hand)
+Gui, Add, DDL, altsubmit vOperation Group Choose%IniOperation% xs w190 section, Climb|Climbex|Sim|Reorder
+Gui, Add, Edit, vIterations xs r1 w50 section, %IniIterations%
+Gui, Add, Edit, vClimbex w50, %IniClimbex%
+Gui, Add, Edit, vThreads number w20, %IniThreads%
+Gui, Add, Edit, vSimOptions r1 w190, %IniSimOptions%
 
-Gui, Add, DDL, vMySiege1 section w110, %Forts_Siege%
+Gui, Add, Text, xm r1 section, VIP Units:
+Gui, Add, Edit, vVIP w350 ys r1 x+50, %IniVIP%
+Gui, Add, Text, xm r1 section, Запасы:
+Gui, Add, Button, ys r1 x+14 w30 section, ...
+Gui, Add, Edit, vCustomDeckFile r1 ys w272 ReadOnly, %IniCustomDeckFile%
+Gui, Add, Button, r1 ys w30, Edit
+Gui, Add, Button, r1 ys w30, Clear
+Gui, Add, Button, default r2 w100 x100 xs+39 section, Simulate
+Gui, Add, Button, r2 w100 ys xs+153, Exit
+Gui, Add, Button, r1 w50 ys+5 x+38, Reset
+Gui, Add, Picture, w115 h-1 ys-80 x+25, C:\Users\KOMMEPCAHT\Desktop\tuo.2.14.0\1.gif
+Gui, Show,, Simple Tyrant Unleashed Optimize Starter v1.0.0 beta
+
+
+Gui, Tab, 1 ;
+Gui, Add, Text, r3 section, My Deck:
+Gui, Add, Text, , Enemy Deck(s):
+Gui, Add, Edit, vMyDeck1 w350 r3  ys, %IniMyDeck%
+Gui, Add, ComboBox, vEnemyDeck1 w350 r3, %IniEnemyDeck%
+
+Gui, Tab, 2 ;
+Gui, Add, Text, r3 section, My Deck:
+Gui, Add, Text, , Enemy Deck(s):
+Gui, Add, Edit, vMyDeck2 w350 r3  ys, %IniMyDeck%
+Gui, Add, ComboBox, vEnemyDeck2 w350 r3, %IniEnemyDeck%
+
+Gui, Tab, 3 ;
+Gui, Add, Text, r3 section, My Deck:
+Gui, Add, Text, r5, MyForts:
+Gui, Add, Text, xs, Enemy Deck(s):
+Gui, Add, Text, r5, EnemyForts:
+Gui, Add, Edit, vMyDeck3 w350 r3  ys, %IniMyDeck%
+Gui, Add, Text, section, MySiege
+Gui, Add, Text, ys x+135, MyDefense
+
+Gui, Add, DDL, vMySiege1 xs section w106, %Forts_Siege%
 GuiControl, ChooseString, MySiege1, %IniMySiege1%
 Gui, Add, Text, ys, -
 Gui, Add, DDL, vMySiege1X ys w30, %Forts_Siege_X%
 GuiControl, ChooseString, MySiege1X, %IniMySiege1X%
 
-Gui, Add, DDL, vMySiege2 ys w110, %Forts_Siege%
-GuiControl, ChooseString, MySiege2, %IniMySiege2%
-Gui, Add, Text, ys, -
-Gui, Add, DDL, vMySiege2X ys w30, %Forts_Siege_X%
-GuiControl, ChooseString, MySiege2X, %IniMySiege2X%
-
-Gui, Add, DDL, vMyDefense1 ys w110, %Forts_Defense%
+Gui, Add, DDL, vMyDefense1 w121 ys x+17, %Forts_Defense%
 GuiControl, ChooseString, MyDefense1, %IniMyDefense1%
 Gui, Add, Text, ys, -
 Gui, Add, DDL, vMyDefense1X ys w30, %Forts_Defense_X%
 GuiControl, ChooseString, MyDefense1X, %IniMyDefense1X%
 
-Gui, Add, DDL, vMyDefense2 ys w110, %Forts_Defense%
+Gui, Add, DDL, vMySiege2 xs w106 section, %Forts_Siege%
+GuiControl, ChooseString, MySiege2, %IniMySiege2%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vMySiege2X ys w30, %Forts_Siege_X%
+GuiControl, ChooseString, MySiege2X, %IniMySiege2X%
+
+Gui, Add, DDL, vMyDefense2 ys w121 x+17, %Forts_Defense%
 GuiControl, ChooseString, MyDefense2, %IniMyDefense2%
 Gui, Add, Text, ys, -
 Gui, Add, DDL, vMyDefense2X ys w30, %Forts_Defense_X%
 GuiControl, ChooseString, MyDefense2X, %IniMyDefense2X%
 
-Gui, Add, Edit, vEnemiesDeck w680 xs r2, %IniEnemiesDeck%
+Gui, Add, ComboBox, vEnemyDeck3 w350 xs r3, %IniEnemyDeck%
 
-Gui, Add, DDL, vEnemySiege1 section w110, %Forts_Siege%
+Gui, Add, Text, section, EnemySiege
+Gui, Add, Text, ys x+117, EnemyDefense
+
+Gui, Add, DDL, vEnemySiege1 xs section w106, %Forts_Siege%
 GuiControl, ChooseString, EnemySiege1, %IniEnemySiege1%
 Gui, Add, Text, ys, -
 Gui, Add, DDL, vEnemySiege1X ys w30, %Forts_Siege_X%
 GuiControl, ChooseString, EnemySiege1X, %IniEnemySiege1X%
 
-Gui, Add, DDL, vEnemySiege2 ys w110, %Forts_Siege%
-GuiControl, ChooseString, EnemySiege2, %IniEnemySiege2%
-Gui, Add, Text, ys, -
-Gui, Add, DDL, vEnemySiege2X ys w30, %Forts_Siege_X%
-GuiControl, ChooseString, EnemySiege2X, %IniEnemySiege2X%
-
-Gui, Add, DDL, vEnemyDefense1 ys w110, %Forts_Defense%
+Gui, Add, DDL, vEnemyDefense1 w121 ys x+17, %Forts_Defense%
 GuiControl, ChooseString, EnemyDefense1, %IniEnemyDefense1%
 Gui, Add, Text, ys, -
 Gui, Add, DDL, vEnemyDefense1X ys w30, %Forts_Defense_X%
 GuiControl, ChooseString, EnemyDefense1X, %IniEnemyDefense1X%
 
-Gui, Add, DDL, vEnemyDefense2 ys w110, %Forts_Defense%
+Gui, Add, DDL, vEnemySiege2 xs w106 section, %Forts_Siege%
+GuiControl, ChooseString, EnemySiege2, %IniEnemySiege2%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vEnemySiege2X ys w30, %Forts_Siege_X%
+GuiControl, ChooseString, EnemySiege2X, %IniEnemySiege2X%
+
+Gui, Add, DDL, vEnemyDefense2 ys w121 x+17, %Forts_Defense%
 GuiControl, ChooseString, EnemyDefense2, %IniEnemyDefense2%
 Gui, Add, Text, ys, -
 Gui, Add, DDL, vEnemyDefense2X ys w30, %Forts_Defense_X%
 GuiControl, ChooseString, EnemyDefense2X, %IniEnemyDefense2X%
 
-Gui, Add, Edit, vVIP w680 xs r1, %IniVIP%
+Gui, Tab, 4 ;
+Gui, Add, Text, r4 section, My Deck:
+Gui, Add, Text, xs, Enemy Deck(s):
+Gui, Add, Text, r5, Forts:
+Gui, Add, Edit, vMyDeck4 w350 r3 ys section, %IniMyDeck%
+Gui, Add, ComboBox, vEnemyDeck4 w350 xs r3, %IniEnemyDeck%
+Gui, Add, Text, section, MyForts
+Gui, Add, Text, ys x+135, EnemyForts
+
+Gui, Add, DDL, vMySiegeQ1 xs section w106, %Forts_Conquest%
+GuiControl, ChooseString, MySiege1, %IniMySiegeQ1%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vMySiegeQ1X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, MySiege1X, %IniMySiegeQ1X%
+
+Gui, Add, DDL, vMySiegeQ2 xs w106 section, %Forts_Conquest%
+GuiControl, ChooseString, MySiege2, %IniMySiegeQ2%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vMySiegeQ2X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, MySiege2X, %IniMySiegeQ2X%
+
+Gui, Add, DDL, vMySiegeQ3 xs section w106, %Forts_Conquest%
+GuiControl, ChooseString, MySiege3, %IniMySiegeQ3%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vMySiegeQ3X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, MySiege3X, %IniMySiegeQ3X%
+
+Gui, Add, DDL, vMySiegeQ4 xs w106 section, %Forts_Conquest%
+GuiControl, ChooseString, MySiege4, %IniMySiegeQ4%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vMySiegeQ4X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, MySiege4X, %IniMySiegeQ4X%
+
+Gui, Add, DDL, vMySiegeQ5 xs w106 section, %Forts_Conquest%
+GuiControl, ChooseString, MySiege5, %IniMySiegeQ5%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vMySiegeQ5X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, MySiege5X, %IniMySiegeQ5X%
+
+Gui, Add, DDL, vEnemySiegeQ1 ys-108 section w106, %Forts_Conquest%
+GuiControl, ChooseString, EnemySiege1, %IniEnemySiegeQ1%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vEnemySiegeQ1X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, EnemySiege1X, %IniEnemySiegeQ1X%
+
+Gui, Add, DDL, vEnemySiegeQ2 xs w106 section, %Forts_Conquest%
+GuiControl, ChooseString, EnemySiege2, %IniEnemySiegeQ2%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vEnemySiegeQ2X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, EnemySiege2X, %IniEnemySiegeQ2X%
+
+Gui, Add, DDL, vEnemySiegeQ3 xs section w106, %Forts_Conquest%
+GuiControl, ChooseString, EnemySiege3, %IniEnemySiegeQ3%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vEnemySiegeQ3X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, EnemySiege3X, %IniEnemySiegeQ3X%
+
+Gui, Add, DDL, vEnemySiegeQ4 xs w106 section, %Forts_Conquest%
+GuiControl, ChooseString, EnemySiege4, %IniEnemySiegeQ4%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vEnemySiegeQ4X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, EnemySiege4X, %IniEnemySiegeQ4X%
+
+Gui, Add, DDL, vEnemySiegeQ5 xs w106 section, %Forts_Conquest%
+GuiControl, ChooseString, EnemySiege5, %IniEnemySiegeQ5%
+Gui, Add, Text, ys, -
+Gui, Add, DDL, vEnemySiegeQ5X ys w30, %Forts_Conquest_X%
+GuiControl, ChooseString, EnemySiege5X, %IniEnemySiegeQ5X%
+return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Gui, Add, DDL, vQuest w210 section, %Quest%
 Gui, Add, Checkbox, vQuestWin ys Checked, and Win
 Gui, Add, Text, ys, X=
 Gui, Add, Edit, vQuestX number ys w30, 1
 
-Gui, Add, ComboBox, vEffect xs Choose1 w150 section, %BGEffects%
-Gui, Add, Text, ys section, -
-Gui, Add, DDL, vEffectX ys w36, %BGEffectsX%
-Gui, Add, Text, ys, Endgame:
-Gui, Add, DDL, altsubmit vEndgame ys Choose%IniEndgame% w133, none|0 - Maxed Units|1 - Maxed Fused|2 - Maxed Quads
-
-Gui, Add, DDL, altsubmit vMode xs-160 w110 Choose%IniMode% section, Battle / Mission|Battle (defense)|GW / CQ / Surge|GW (defense)|Brawl|Raid|Campaign
-Gui, Add, Checkbox, vModeATK ys Checked, ATK
-Gui, Add, Checkbox, vModeDEF ys Checked, DEF
-
-Gui, Add, Text, ys w40, Order:
-Gui, Add, DDL, altsubmit vOrder Group Choose%IniOrder% ys w133, Random|Ordered (honor 3-card hand)
-
-Gui, Add, DDL, altsubmit vOperation Group Choose%IniOperation% xs w110 section, Climb|Climbex|Sim|Reorder
-Gui, Add, Text, ys r1, Iterations:
-Gui, Add, Edit, vIterations ys r1 w35, %IniIterations%
-
-Gui, Add, Text, ys w45, Climbex:
-Gui, Add, Edit, vClimbex ys w50, %IniClimbex%
-Gui, Add, Text, ys, Threads:
-Gui, Add, Edit, vThreads number ys w20, %IniThreads%
-
-Gui, Add, Edit, vSimOptions r1 xs w410, %IniSimOptions%
-Gui, Add, Button, r1 w50 section, ...
-Gui, Add, Edit, vCustomDeckFile r1 ys w350 ReadOnly, %IniCustomDeckFile%
-Gui, Add, Button, r1 ys w50, Edit
-Gui, Add, Button, r1 ys w50, Clear
-Gui, Add, Button, default r2 w100 x100 y+15 section, Simulate
-Gui, Add, Checkbox, vx86 Checked%Inix86%, x86 (32-bit)
-Gui, Add, Button, r2 w100 ys xs+200, Exit
-Gui, Show,, Simple Tyrant Unleashed Optimize Starter v2.12.0
-return  
+  
 
 Button...:
 Gui, Submit
@@ -201,8 +304,15 @@ return
 
 ButtonSimulate:
 Gui, Submit
-selTUO := (x86 ? "tuo-x86" : "tuo")
-selMode := (Mode == 1 ? "pvp" : Mode == 2 ? "pvp-defense" : Mode == 3 ? "gw" : Mode == 4 ? "gw-defense" :Mode == 5 ? "brawl" : Mode == 6 ? "raid" : "campaign")
+VarSetCApacity(test, 8, 0)
+NumPut(-1, &test, 0, "ptr")
+if (NumGet (&test, 4, "int"))	{
+selTUO := "tuo-x86"
+}	else {
+selTUO := "tuo"
+} 
+
+selMode := (Mode == 1 ? "pvp" : Mode == 2 ? "gw" : Mode == 3 ? "brawl" : Mode == 4 ? "raid" : "campaign")
 selOrder := (Order == 1 ? "random" : "ordered")
 selOperation :=  (Operation == 1 ? "climb" : Operation == 2 ? "climbex" : Operation == 3 ? "sim" : "reorder")
 
@@ -212,7 +322,6 @@ if (Operation == "2")	{
 		selIterations := Iterations
 	}
 
-	
 if (MySiege1 == "" || MySiege1 == "none")	{
 	if (MySiege2 == "" || MySiege2 == "none")	{
 		selMySiege := ""
@@ -280,6 +389,8 @@ StringReplace, Quest, Quest, %A_Space%cards
 StringReplace, Quest, Quest, Play, cu
 StringReplace, Quest, Quest, in%A_Space%each%A_Space%battle, each
 selQuest := (Quest == "" || Quest == "none" ? "" : "quest """ Quest (QuestWin ? " win" : "") """ ")
+
+selEffect := ( Effect == "" || Effect == "none" ? "" : "-e """ Effect """ ")
 selEffect := ( Effect == "" || Effect == "none" ? "" : "-e """ Effect """ ")
 selThreads := ( Threads == "4" ? "" : "-t " Threads " ")
 selSimOptions := ( SimOptions == "" ? "" : SimOptions " ")
@@ -293,15 +404,16 @@ if (ModeATK <> true && ModeDEF <> true)	{
 }	else	{
 	if (ModeATK == true && ModeDEF <> true)	{
 		execStringATK = %selTUO% "%MyDeck%" "%EnemyDeck%" %selMode% %selOrder% %selMySiege%%selEnemyDefense%%selVIP%%selQuest%%selEffect%%selThreads%%selEndgame%%selFund%%selSimOptions%%selOperation% %selIterations%%selCustomDeckFile%
+		MsgBox, %execStringATK%
 		Run, cmd.exe /c title TUOptimizeOutput && echo %execStringATK% && %execStringATK% & pause
 	}	else	{
 		if (ModeATK <> true && ModeDEF == true)	{
-			execStringDEF = %selTUO% "%MyDeck%" "%EnemyDeck%" %selMode% %selOrder% %selMyDefense%%selEnemySiege%%selVIP%%selQuest%%selEffect%%selThreads%%selEndgame%%selFund%%selSimOptions%%selOperation% %selIterations%%selCustomDeckFile%
+			execStringDEF = %selTUO% "%MyDeck%" "%EnemyDeck%" %selMode%-defense random %selMyDefense%%selEnemySiege%%selVIP%%selQuest%%selEffect%%selThreads%%selEndgame%%selFund%%selSimOptions%%selOperation% %selIterations%%selCustomDeckFile%
 			Run, cmd.exe /c title TUOptimizeOutput && echo %execStringDEF% && %execStringDEF% & pause
 		}	else	{
 			if (ModeATK == true && ModeDEF == true)	{
-			execStringATK = %selTUO% "%MyDeck%" "%EnemyDeck%" %selMode% %selOrder% %selMySiege%%selEnemyDefense%%selVIP%%selQuest%%selEffect%%selThreads%%selEndgame%%selFund%%selSimOptions%%selOperation% %selIterations%%selCustomDeckFile%}
-			execStringDEF = %selTUO% "%MyDeck%" "%EnemyDeck%" %selMode% %selOrder% %selMyDefense%%selEnemySiege%%selVIP%%selQuest%%selEffect%%selThreads%%selEndgame%%selFund%%selSimOptions%%selOperation% %selIterations%%selCustomDeckFile%
+			execStringATK = %selTUO% "%MyDeck%" "%EnemyDeck%" %selMode%%selDEF% %selOrder% %selMySiege%%selEnemyDefense%%selVIP%%selQuest%%selEffect%%selThreads%%selEndgame%%selFund%%selSimOptions%%selOperation% %selIterations%%selCustomDeckFile%}
+			execStringDEF = %selTUO% "%MyDeck%" "%EnemyDeck%" %selMode%-defense random %selMyDefense%%selEnemySiege%%selVIP%%selQuest%%selEffect%%selThreads%%selEndgame%%selFund%%selSimOptions%%selOperation% %selIterations%%selCustomDeckFile%
 			Run, cmd.exe /c title TUOptimizeOutput && echo %execStringATK% && %execStringATK% & cmd.exe /c title TUOptimizeOutput && echo %execStringDEF% && %execStringDEF% & pause
 			Goto, Sim
 		}
@@ -313,9 +425,36 @@ Sim:
 Gui, Show
 return
 
+ButtonReset:
+GuiControl,, MyDeck, Cyrus, Medic, Revolver, Imperial APC, Medic, Imperial APC
+GuiControl, ChooseString, MySiege1, none
+GuiControl, ChooseString, MySiege2, none
+GuiControl, ChooseString, MyDefense1, none
+GuiControl, ChooseString, MyDefense2, none
+GuiControl,, EnemyDeck, Iron Mutant
+GuiControl, ChooseString, EnemySiege1, none 
+GuiControl, ChooseString, EnemySiege2, none 
+GuiControl, ChooseString, EnemyDefense1, none 
+GuiControl, ChooseString, EnemyDefense2, none 
+GuiControl,, VIP, 
+GuiControl, ChooseString, Effect, none
+GuiControl, ChooseString, EffectX, 1
+GuiControl, Choose, Endgame, 1
+GuiControl,, Fund, 0
+GuiControl, Choose, Mode, 1
+GuiControl, Choose, Order, 1
+GuiControl, Choose, Operation, 1
+GuiControl,, Iterations, 1000
+GuiControl,, Climbex, 100000
+GuiControl, Choose, Threads, 4
+GuiControl,, SimOptions, 
+GuiControl,, CustomDeckFile, data\ownedcards.txt
+GuiControl, Choose, Log, 2
+Gui, Show
+return
+
 MenuHelp:
 Gui, Submit
-selTUO := (x86 ? "tuo-x86" : "tuo")
 Run, cmd.exe /c title TUOptimizeOutput && echo %selTUO% && %selTUO% & pause
 Gui, Show
 return
@@ -389,9 +528,23 @@ GuiClose:
 ButtonExit:
 Gui, Submit
 IniWrite, %MyDeck%, %IniFileName%, %IniSection%, MyDeck
-IniWrite, %MySiege%, %IniFileName%, %IniSection%, MySiege
+IniWrite, %MySiege1%, %IniFileName%, %IniSection%, MySiege1
+IniWrite, %MySiege1X%, %IniFileName%, %IniSection%, MySiege1X
+IniWrite, %MySiege2%, %IniFileName%, %IniSection%, MySiege2
+IniWrite, %MySiege2X%, %IniFileName%, %IniSection%, MySiege2X
+IniWrite, %MyDefense1%, %IniFileName%, %IniSection%, MyDefense1
+IniWrite, %MyDefense1X%, %IniFileName%, %IniSection%, MyDefense1X
+IniWrite, %MyDefense2%, %IniFileName%, %IniSection%, MyDefense2
+IniWrite, %MyDefense2X%, %IniFileName%, %IniSection%, MyDefense2X
 IniWrite, %EnemyDeck%, %IniFileName%, %IniSection%, EnemyDeck
-IniWrite, %EnemySiege%, %IniFileName%, %IniSection%, EnemySiege
+IniWrite, %EnemySiege1%, %IniFileName%, %IniSection%, EnemySiege1
+IniWrite, %EnemySiege1X%, %IniFileName%, %IniSection%, EnemySiege1X
+IniWrite, %EnemySiege2%, %IniFileName%, %IniSection%, EnemySiege2
+IniWrite, %EnemySiege2X%, %IniFileName%, %IniSection%, EnemySiege2X
+IniWrite, %EnemyDefense1%, %IniFileName%, %IniSection%, EnemyDefense1
+IniWrite, %EnemyDefense1X%, %IniFileName%, %IniSection%, EnemyDefense1X
+IniWrite, %EnemyDefense2%, %IniFileName%, %IniSection%, EnemyDefense2
+IniWrite, %EnemyDefense2X%, %IniFileName%, %IniSection%, EnemyDefense2X
 IniWrite, %VIP%, %IniFileName%, %IniSection%, VIP
 IniWrite, %Effect%, %IniFileName%, %IniSection%, Effect
 IniWrite, %Mode%, %IniFileName%, %IniSection%, Mode
@@ -402,7 +555,6 @@ IniWrite, %Threads%, %IniFileName%, %IniSection%, Threads
 IniWrite, %SimOptions%, %IniFileName%, %IniSection%, SimOptions
 IniWrite, %Endgame%, %IniFileName%, %IniSection%, Endgame
 IniWrite, %Fund%, %IniFileName%, %IniSection%, Fund
-IniWrite, %x86%, %IniFileName%, %IniSection%, x86
 
 while true
 {
